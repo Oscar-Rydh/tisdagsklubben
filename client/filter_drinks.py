@@ -7,19 +7,17 @@ drinks = drinks['artiklar']['artikel']
 
 whiskies = [drink for drink in drinks if drink.get('Varugrupp', None) == 'Whisky' ]
 
+fixed_whiskies = []
 for whisky in whiskies:
+  new_whisky = {}
   for key in whisky.keys():
-    whisky[key.lower()] = whisky.pop(key)
+    new_whisky[key.lower()] = whisky[key] 
+  fixed_whiskies.append(new_whisky)
 
 filtered_whiskies = []
-last_len = 1
-for current_whisky in whiskies:
-  for whisky in whiskies:
-    if whisky.get('namn') == current_whisky.get('namn') and \
-      whisky.get('namn2') == current_whisky.get('namn2') and \
-      whisky.get('alkoholhalt') == current_whisky.get('alkoholhalt') and \
-      whisky.get('prisinklmoms') == current_whisky.get('prisinklmoms'):
-        whiskies.remove(whisky)
-  filtered_whiskies.append(current_whisky)
+for current_whisky in fixed_whiskies:
+  res = [filtered_whisky for filtered_whisky in filtered_whiskies if current_whisky['namn'] == filtered_whisky['namn'] and current_whisky['namn2'] == filtered_whisky['namn2']]
+  if len(res) == 0:
+    filtered_whiskies.append(current_whisky)
 
-json.dump(whiskies, open('whiskies.json', 'w'))
+json.dump(filtered_whiskies, open('whiskies.json', 'w'))

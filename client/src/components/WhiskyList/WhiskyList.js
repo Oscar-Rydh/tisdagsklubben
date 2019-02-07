@@ -13,6 +13,7 @@ export default function WhiskyList(props) {
             namn2={whisky.namn2}
             typ={whisky.typ}
             ursprunglandnamn={whisky.ursprunglandnamn}
+            ursprung={whisky.ursprung}
             alkoholhalt={whisky.alkoholhalt}
             volymiml={whisky.volymiml}
             prisinklmoms={whisky.prisinklmoms}

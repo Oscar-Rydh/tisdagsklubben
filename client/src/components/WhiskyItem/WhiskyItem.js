@@ -10,7 +10,7 @@ export default function WhiskyItem(props) {
         centered={true}
         header={props.namn}
         meta={props.namn2}
-        description={props.typ + ", " + props.ursprunglandnamn + ', ' + props.alkoholhalt}
+        description={props.typ + ", " + props.ursprunglandnamn + '/' + props.ursprung + ', ' + props.alkoholhalt}
         extra={props.volymiml + "ml, " + props.prisinklmoms + "kr"}
       />
     </div>
