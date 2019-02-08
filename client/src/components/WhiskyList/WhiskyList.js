@@ -6,7 +6,7 @@ export default function WhiskyList(props) {
   const whiskies = props.whiskies
   let whiskyItems = whiskies.map(whisky => {
     return (
-      <Grid.Row key={whisky.key} columns={1}>
+      <Grid.Row key={whisky.artikelid} columns={1}>
         <Grid.Column >
           <WhiskyItem
             namn={whisky.namn}

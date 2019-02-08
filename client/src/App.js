@@ -79,7 +79,7 @@ class App extends Component {
       this.setState({ showing_whiskies: this.state.added_whiskies })
     }
     const re = new RegExp(input.value, 'i');
-    const filtered_whiskies = this.state.added_whiskies.filter(function (whisky) { return re.test(whisky.title); });
+    const filtered_whiskies = this.state.added_whiskies.filter(function (whisky) { return re.test(whisky.namn); });
     this.setState({ showing_whiskies: filtered_whiskies })
   })
 
