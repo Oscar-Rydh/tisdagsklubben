@@ -25,10 +25,12 @@ class App extends Component {
       added_whiskies: [],
       showing_whiskies: [],
       selectedWhisky: {},
+      loadingMessage: 'Dricker Whisky',
       isAdding: false,
       buttonValue: 'Lägg till',
       buttonColor: 'blue'
     }
+    this.fetchWhiskies()
   }
 
   _updateWhiskies = () => {
@@ -85,7 +87,7 @@ class App extends Component {
 
 
   fetchWhiskies = () => {
-    fetch('/whiskies', {
+    return fetch('/whiskies', {
       method: 'Get',
       headers: {
         'Accept': 'application/json',
@@ -93,24 +95,22 @@ class App extends Component {
       }
     }).then(response => {
       response.json().then(result => {
-        console.log(result)
         this.setState({ isLoading: false, added_whiskies: result.whiskies, showing_whiskies: result.whiskies })
       }).catch(err => {
-
+        this.setState({loadingMessage: 'Jonas har sabbat nått, testa igen'})
+      }).catch(err => {
+        this.setState({loadingMessage: 'Jonas har sabbat nått, testa igen'})
       })
-    }).catch(err => {
-
     })
   }
 
   render() {
 
     if (this.state.isLoading) {
-      this.fetchWhiskies()
       return (
         <div className="App">
           <Dimmer active>
-            <Loader content='Dricker Whisky' />
+            <Loader content={this.state.loadingMessage} />
           </Dimmer>
         </div>
       )
