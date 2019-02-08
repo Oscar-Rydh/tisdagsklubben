@@ -3,14 +3,23 @@ var router = express.Router();
 var connection = require('../database/database')
 
 
-router.get('/', function(req, res, next){
+function getWhiskies(callback) {
   connection.query('SELECT * from whiskies', function(error, results, fields) {
     if (error) {
-      console.log(error)
-      console.log("WE GOT ERROR")
-      res.json({status: 500})
+      return callback(error, undefined)
     } else {
-      res.json({status: 200, whiskies: results})
+      return callback(undefined, results)
+    }
+  })
+  
+}
+
+router.get('/', function(req, res, next){
+  getWhiskies(function(error, result) {
+    if (error) {
+      res.json({status: 500, msg: error})
+    } else {
+      res.json({status: 200, whiskies: result})
     }
   })
 });
@@ -34,6 +43,35 @@ router.post('/', function(req, res, next) {
         res.json({status: 500, msg: 'Could not add whisky'})
       } else {
         res.json({status: 200, msg: 'OK'})
+      }
+  });
+});
+
+router.delete('/', function(req, res, next) {
+  const body = req.body
+  connection.query('DELETE FROM whiskies WHERE \
+    namn = ? AND namn2 = ? AND typ = ? AND ursprunglandnamn = ? AND ursprung = ? AND \
+     alkoholhalt = ? AND volymiml = ? AND prisinklmoms = ? AND artikelid = ?', [
+      body.namn, 
+      body.namn2, 
+      body.typ, 
+      body.ursprunglandnamn,
+      body.ursprung,
+      body.alkoholhalt,
+      body.volymiml,
+      body.prisinklmoms,
+      body.artikelid
+    ], function (error, results, fields) {
+      if (error) {
+        res.json({status: 500, msg: 'Could not remove whisky'})
+      } else {
+        getWhiskies(function(error, result) {
+          if (error) {
+            res.json({status: 500, msg: error})
+          } else {
+            res.json({status: 200, whiskies: result})
+          }
+        })
       }
   });
 });

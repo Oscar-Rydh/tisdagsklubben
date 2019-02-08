@@ -17,6 +17,8 @@ export default function WhiskyList(props) {
             alkoholhalt={whisky.alkoholhalt}
             volymiml={whisky.volymiml}
             prisinklmoms={whisky.prisinklmoms}
+            handleWhiskyDelete={props.handleWhiskyDelete}
+            whisky={whisky}
           />
         </Grid.Column>
       </Grid.Row>

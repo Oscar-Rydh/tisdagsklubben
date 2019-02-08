@@ -85,6 +85,24 @@ class App extends Component {
     this.setState({ showing_whiskies: filtered_whiskies })
   })
 
+  deleteWhisky = (whisky) => {
+    fetch('/whiskies', {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(whisky)
+    }).then(response => {
+      response.json().then(result => {
+        this.setState({ isLoading: false, added_whiskies: result.whiskies, showing_whiskies: result.whiskies })
+      }).catch(err => {
+        this.setState({ isLoading: true, loadingMessage: 'Nu gick nått sönder. Ladda om' })
+      })
+    }).catch(err => {
+      this.setState({ isLoading: true, loadingMessage: 'Nu gick nått sönder. Ladda om' })
+    })
+  }
 
   fetchWhiskies = () => {
     return fetch('/whiskies', {
@@ -142,7 +160,7 @@ class App extends Component {
 
             <Divider hidden={true} />
 
-            <WhiskyList whiskies={this.state.showing_whiskies} />
+            <WhiskyList whiskies={this.state.showing_whiskies} handleWhiskyDelete={this.deleteWhisky} />
 
           </Container>
         </div>
