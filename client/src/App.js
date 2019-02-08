@@ -46,17 +46,17 @@ class App extends Component {
       response.json().then(result => {
         const added_whiskies = [...this.state.added_whiskies, this.state.selectedWhisky]
         this.setState({
-          added_whiskies, 
-          showing_whiskies: added_whiskies, 
-          isAdding: false, 
-          buttonValue: 'Ny whisky, nice!', 
-          buttonColor: 'green' 
+          added_whiskies,
+          showing_whiskies: added_whiskies,
+          isAdding: false,
+          buttonValue: 'Ny whisky, nice!',
+          buttonColor: 'green'
         })
       }).catch(err => {
-        this.setState({ isAdding: false, buttonValue: 'Fel, säg till Jonas!', buttonColor: 'red' })
+        this.setState({ isAdding: false, buttonValue: 'Kunde inte lägga till, säg till Jonas!', buttonColor: 'red' })
       })
     }).catch(err => {
-      this.setState({ isAdding: false, buttonValue: 'Fel, säg till Jonas!', buttonColor: 'red' })
+      this.setState({ isAdding: false, buttonValue: 'Kunde inte lägga till, säg till Jonas!', buttonColor: 'red' })
     })
   }
 
@@ -68,7 +68,7 @@ class App extends Component {
     if (filtedred_whiskies.length === 0) {
       this._updateWhiskies()
     } else {
-      this.setState({buttonValue: 'Denna whisky finns redan.', buttonColor: 'yellow'})
+      this.setState({ buttonValue: 'Denna whisky finns redan.', buttonColor: 'yellow' })
     }
   }
 
@@ -97,9 +97,9 @@ class App extends Component {
       response.json().then(result => {
         this.setState({ isLoading: false, added_whiskies: result.whiskies, showing_whiskies: result.whiskies })
       }).catch(err => {
-        this.setState({loadingMessage: 'Jonas har sabbat nått, testa igen'})
+        this.setState({ loadingMessage: 'Jonas har sabbat nått, testa igen' })
       }).catch(err => {
-        this.setState({loadingMessage: 'Jonas har sabbat nått, testa igen'})
+        this.setState({ loadingMessage: 'Jonas har sabbat nått, testa igen' })
       })
     })
   }
