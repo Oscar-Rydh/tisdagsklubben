@@ -28,4 +28,4 @@ services:
       - "3001:3001"
     links:
       - "db:database"
-    command: "npm start-docker"
+    command: "npm run docker"

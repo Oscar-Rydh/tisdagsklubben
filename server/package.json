@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start-docker": "npm install && npm start"
+    "docker": "npm install && npm start"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
