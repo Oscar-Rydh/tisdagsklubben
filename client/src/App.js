@@ -24,21 +24,46 @@ class App extends Component {
       added_whiskies: [],
       showing_whiskies: [],
       selectedWhisky: {},
+      isAdding: false, 
+      buttonValue: 'Lägg till',
+      buttonColor: 'blue'
     }
   }
 
   addWhisky = () => {
+    this.setState({isAdding: true})
+    fetch('/whiskies', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state.selectedWhisky)
+    }).then(response => {
+      response.json().then(result => {
+        console.log(result)
+        this.setState({isAdding: false, buttonValue: 'Ny whisky, nice!', buttonColor: 'green'})
+      }).catch(err => {
+        console.log(err)
+        this.setState({isAdding: false, buttonValue: 'Fel, säg till Jonas!', buttonColor: 'red'})
+      })
+    }).catch(err => {
+      console.log(err)
+      this.setState({isAdding: false, buttonValue: 'Fel, säg till Jonas!', buttonColor: 'red'})
+    })
+
+
     const filtedred_whiskies = this.state.added_whiskies.filter(whisky => {
       return whisky.key === this.state.selectedWhisky.key
     })
     if (filtedred_whiskies.length === 0) {
       const added_whiskies = [...this.state.added_whiskies, this.state.selectedWhisky]
-      this.setState({ added_whiskies, showing_whiskies: added_whiskies  })
+      this.setState({ added_whiskies, showing_whiskies: added_whiskies })
     }
   }
 
   setSelectedWhisky = (whisky) => {
-    this.setState({ selectedWhisky: whisky })
+    this.setState({ selectedWhisky: whisky, buttonColor: 'blue', buttonValue: 'Lägg till' })
   }
 
   filterWhiskies = ((event, input) => {
@@ -65,7 +90,11 @@ class App extends Component {
 
           <Divider hidden={true} />
 
-          <Button color="green" onClick={this.addWhisky}>Lägg Till</Button>
+          <Button 
+          loading={this.state.isAdding} 
+          color={this.state.buttonColor} 
+          onClick={this.addWhisky}
+          >{this.state.buttonValue}</Button>
 
           <Divider />
 
