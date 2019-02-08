@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Container, Header, Divider, Button, Input } from 'semantic-ui-react'
+import { Container, Header, Divider, Button, Input, Loader, Dimmer } from 'semantic-ui-react'
 import SearchField from './components/SearchField/SearchField'
 import WhiskyList from './components/WhiskyList/WhiskyList'
 import whiskies from './data/whiskies';
@@ -20,18 +20,19 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      isLoading: true,
       all_whiskies: new_whiskies,
       added_whiskies: [],
       showing_whiskies: [],
       selectedWhisky: {},
-      isAdding: false, 
+      isAdding: false,
       buttonValue: 'Lägg till',
       buttonColor: 'blue'
     }
   }
 
-  addWhisky = () => {
-    this.setState({isAdding: true})
+  _updateWhiskies = () => {
+    this.setState({ isAdding: true })
     fetch('/whiskies', {
       method: 'POST',
       headers: {
@@ -41,24 +42,31 @@ class App extends Component {
       body: JSON.stringify(this.state.selectedWhisky)
     }).then(response => {
       response.json().then(result => {
-        console.log(result)
-        this.setState({isAdding: false, buttonValue: 'Ny whisky, nice!', buttonColor: 'green'})
+        const added_whiskies = [...this.state.added_whiskies, this.state.selectedWhisky]
+        this.setState({
+          added_whiskies, 
+          showing_whiskies: added_whiskies, 
+          isAdding: false, 
+          buttonValue: 'Ny whisky, nice!', 
+          buttonColor: 'green' 
+        })
       }).catch(err => {
-        console.log(err)
-        this.setState({isAdding: false, buttonValue: 'Fel, säg till Jonas!', buttonColor: 'red'})
+        this.setState({ isAdding: false, buttonValue: 'Fel, säg till Jonas!', buttonColor: 'red' })
       })
     }).catch(err => {
-      console.log(err)
-      this.setState({isAdding: false, buttonValue: 'Fel, säg till Jonas!', buttonColor: 'red'})
+      this.setState({ isAdding: false, buttonValue: 'Fel, säg till Jonas!', buttonColor: 'red' })
     })
+  }
 
-
+  addWhisky = () => {
     const filtedred_whiskies = this.state.added_whiskies.filter(whisky => {
       return whisky.key === this.state.selectedWhisky.key
     })
+
     if (filtedred_whiskies.length === 0) {
-      const added_whiskies = [...this.state.added_whiskies, this.state.selectedWhisky]
-      this.setState({ added_whiskies, showing_whiskies: added_whiskies })
+      this._updateWhiskies()
+    } else {
+      this.setState({buttonValue: 'Denna whisky finns redan.', buttonColor: 'yellow'})
     }
   }
 
@@ -76,37 +84,70 @@ class App extends Component {
   })
 
 
+  fetchWhiskies = () => {
+    fetch('/whiskies', {
+      method: 'Get',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      response.json().then(result => {
+        console.log(result)
+        this.setState({ isLoading: false, added_whiskies: result.whiskies, showing_whiskies: result.whiskies })
+      }).catch(err => {
+
+      })
+    }).catch(err => {
+
+    })
+  }
+
   render() {
-    return (
-      <div className="App" >
 
-        <Container text>
-          <Divider hidden={true} />
-          <Header as='h2'>Tisdagsklubben</Header>
-          <p>
-            Välkommen till tisdagsklubben. Här kan du lägga till din köpta whisky!
+    if (this.state.isLoading) {
+      this.fetchWhiskies()
+      return (
+        <div className="App">
+          <Dimmer active>
+            <Loader content='Dricker Whisky' />
+          </Dimmer>
+        </div>
+      )
+    } else {
+      return (
+        <div className="App" >
+
+          <Container text>
+            <Divider hidden={true} />
+            <Header as='h2'>Tisdagsklubben</Header>
+            <p>
+              Välkommen till tisdagsklubben. Här kan du lägga till din köpta whisky!
           </p>
-          <SearchField handleSelection={this.setSelectedWhisky} options={this.state.all_whiskies} />
+            <SearchField handleSelection={this.setSelectedWhisky} options={this.state.all_whiskies} />
 
-          <Divider hidden={true} />
+            <Divider hidden={true} />
 
-          <Button 
-          loading={this.state.isAdding} 
-          color={this.state.buttonColor} 
-          onClick={this.addWhisky}
-          >{this.state.buttonValue}</Button>
+            <Button
+              loading={this.state.isAdding}
+              color={this.state.buttonColor}
+              onClick={this.addWhisky}
+            >
+              {this.state.buttonValue}
+            </Button>
 
-          <Divider />
+            <Divider />
 
-          <Input placeholder='Filter...' onChange={this.filterWhiskies} />
+            <Input placeholder='Filter...' onChange={this.filterWhiskies} />
 
-          <Divider hidden={true} />
+            <Divider hidden={true} />
 
-          <WhiskyList whiskies={this.state.showing_whiskies} />
+            <WhiskyList whiskies={this.state.showing_whiskies} />
 
-        </Container>
-      </div>
-    );
+          </Container>
+        </div>
+      );
+    }
   }
 }
 
