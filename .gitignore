@@ -1,4 +1,3 @@
 *.xml
 .vscode
 data/
-!mysql_data/data/.gitkeep
