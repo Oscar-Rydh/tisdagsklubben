@@ -26,6 +26,4 @@ services:
       - ./server:/home/node/app
     ports:
       - "3001:3001"
-    links:
-      - "db:database"
     command: "npm run docker"
