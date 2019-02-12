@@ -2,7 +2,7 @@ version: "2"
 services:
 
   db:
-    image: mysql
+    build: ./database
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     container_name: tisdagsklubben_database
@@ -12,18 +12,18 @@ services:
       MYSQL_PASSWORD: 'password'
       MYSQL_DATABASE: 'whisky'
     volumes:
-        - ./mysql_data/data:/var/lib/mysql
-        - ./mysql_data/init/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+        - db_data:/var/lib/mysql
 
   node:
-    image: "node:10.12"
+    build: ./app
     user: "node"
     container_name: tisdagsklubben_server
     working_dir: /home/node/app
     environment:
       - NODE_ENV=debug
-    volumes:
-      - ./server:/home/node/app
     ports:
       - "3001:3001"
     command: "npm run docker"
+
+volumes:
+  db_data:
