@@ -1,5 +1,5 @@
 FROM node:10.12
 
-COPY config /home/node/app
+COPY server /home/node/app
 
 RUN chown -R node:node /home/node
