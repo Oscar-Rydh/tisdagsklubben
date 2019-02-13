@@ -6,6 +6,7 @@ var connection = require('../database/database')
 function getWhiskies(callback) {
   connection.query('SELECT * from whiskies', function(error, results, fields) {
     if (error) {
+      connection.end();
       return callback(error, undefined)
     } else {
       return callback(undefined, results)
@@ -21,7 +22,6 @@ router.get('/', function(req, res, next){
     } else {
       res.json({status: 200, whiskies: result})
     }
-    connection.end();
   })
 });
 
@@ -45,8 +45,7 @@ router.post('/', function(req, res, next) {
       } else {
         res.json({status: 200, msg: 'OK'})
       }
-      connection.end();
-  });
+  })
 });
 
 router.delete('/', function(req, res, next) {
@@ -73,7 +72,6 @@ router.delete('/', function(req, res, next) {
           } else {
             res.json({status: 200, whiskies: result})
           }
-          connection.end();
         })
       }
   });
