@@ -21,6 +21,7 @@ router.get('/', function(req, res, next){
     } else {
       res.json({status: 200, whiskies: result})
     }
+    connection.end();
   })
 });
 
@@ -44,6 +45,7 @@ router.post('/', function(req, res, next) {
       } else {
         res.json({status: 200, msg: 'OK'})
       }
+      connection.end();
   });
 });
 
@@ -71,6 +73,7 @@ router.delete('/', function(req, res, next) {
           } else {
             res.json({status: 200, whiskies: result})
           }
+          connection.end();
         })
       }
   });
