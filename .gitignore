@@ -1,3 +1,4 @@
 *.xml
 .vscode
 data/
+.DS_Store
