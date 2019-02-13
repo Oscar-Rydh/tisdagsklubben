@@ -19,10 +19,21 @@ export default class WhiskyItem extends Component {
     return (
       <div>
         <Card centered={true}>
-          <Card.Header ><strong>{this.props.namn} </strong> </Card.Header>
+          <Card.Header ><strong> {this.props.namn} </strong></Card.Header>
           <Card.Meta>{this.props.namn2}</Card.Meta>
-          <Card.Description>{this.props.typ + ", " + this.props.ursprunglandnamn + '/' + this.props.ursprung + ', ' + this.props.alkoholhalt}</Card.Description>
-          <Card.Content extra>{this.props.volymiml + "ml, " + this.props.prisinklmoms + "kr"}</Card.Content>
+          <Card.Description>
+            {
+              this.props.typ + ", " +
+              this.props.ursprunglandnamn + '/' + this.props.ursprung + ', ' +
+              this.props.alkoholhalt
+            }
+          </Card.Description>
+          <Card.Content extra>
+            {
+              this.props.volymiml + "ml, " + this.props.prisinklmoms + "kr"
+            }
+          </Card.Content>
+          
           <Card.Content extra>
             <Modal trigger={<Button color='red'>Ta Bort</Button>} closeIcon>
               <Modal.Header>Ta Bort Whisky</Modal.Header>
@@ -38,6 +49,7 @@ export default class WhiskyItem extends Component {
               </Modal.Actions>
             </Modal>
           </Card.Content>
+
         </Card>
       </div>
     )

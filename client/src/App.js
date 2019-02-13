@@ -53,10 +53,18 @@ class App extends Component {
           buttonColor: 'green'
         })
       }).catch(err => {
-        this.setState({ isAdding: false, buttonValue: 'Kunde inte lägga till, säg till Jonas!', buttonColor: 'red' })
+        this.setState({ 
+          isAdding: false, 
+          buttonValue: 'Kunde inte lägga till, säg till Jonas!', 
+          buttonColor: 'red' 
+        })
       })
     }).catch(err => {
-      this.setState({ isAdding: false, buttonValue: 'Kunde inte lägga till, säg till Jonas!', buttonColor: 'red' })
+      this.setState({ 
+        isAdding: false, 
+        buttonValue: 'Kunde inte lägga till, säg till Jonas!', 
+        buttonColor: 'red' 
+      })
     })
   }
 
@@ -81,7 +89,7 @@ class App extends Component {
       this.setState({ showing_whiskies: this.state.added_whiskies })
     }
     const re = new RegExp(input.value, 'i');
-    const filtered_whiskies = this.state.added_whiskies.filter(function (whisky) { return re.test(whisky.namn); });
+    const filtered_whiskies = this.state.added_whiskies.filter((whisky) => re.test(whisky.namn));
     this.setState({ showing_whiskies: filtered_whiskies })
   })
 
@@ -95,12 +103,22 @@ class App extends Component {
       body: JSON.stringify(whisky)
     }).then(response => {
       response.json().then(result => {
-        this.setState({ isLoading: false, added_whiskies: result.whiskies, showing_whiskies: result.whiskies })
+        this.setState({ 
+          isLoading: false, 
+          added_whiskies: result.whiskies, 
+          showing_whiskies: result.whiskies 
+        })
       }).catch(err => {
-        this.setState({ isLoading: true, loadingMessage: 'Nu gick nått sönder. Ladda om' })
+        this.setState({ 
+          isLoading: true, 
+          loadingMessage: 'Nu gick nått sönder. Ladda om' 
+        })
       })
     }).catch(err => {
-      this.setState({ isLoading: true, loadingMessage: 'Nu gick nått sönder. Ladda om' })
+      this.setState({ 
+        isLoading: true, 
+        loadingMessage: 'Nu gick nått sönder. Ladda om'
+      })
     })
   }
 
@@ -113,7 +131,11 @@ class App extends Component {
       }
     }).then(response => {
       response.json().then(result => {
-        this.setState({ isLoading: false, added_whiskies: result.whiskies, showing_whiskies: result.whiskies })
+        this.setState({ 
+          isLoading: false, 
+          added_whiskies: result.whiskies, 
+          showing_whiskies: result.whiskies 
+        })
       }).catch(err => {
         this.setState({ loadingMessage: 'Jonas har sabbat nått, testa igen' })
       }).catch(err => {
