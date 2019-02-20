@@ -22,8 +22,23 @@ services:
     environment:
       - NODE_ENV=debug
     ports:
-      - "3001:3001"
+      - 3001:3001
     command: "npm run docker"
+
+  nginx:
+    build: ./nginx
+    environment:
+        - CERTBOT_EMAIL=
+        - DHPARAM_SIZE=2048
+        - RSA_KEY_SIZE=2048
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - nginx_secrets:/etc/letsencrypt
+    depends_on:
+      - node
 
 volumes:
   db_data:
+  nginx_secrets:
