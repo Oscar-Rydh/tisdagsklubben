@@ -27,6 +27,7 @@ services:
       - 443:443
     volumes:
       - nginx_secrets:/etc/letsencrypt
+      - log_collector:/xlogs
     depends_on:
       - fail2ban
       - node
