@@ -1,4 +1,4 @@
 *.xml
 .vscode
-data/
+tisdagsklubben/client/src/data/
 .DS_Store
