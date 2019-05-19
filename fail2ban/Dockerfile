@@ -1,4 +1,4 @@
-FROM jonasal/docker-fail2ban
+FROM jonasal/fail2ban
 
 COPY ./data /data
 
