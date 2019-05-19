@@ -1,32 +1,23 @@
 version: "3"
 services:
 
-  db:
-    build: ./database
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    container_name: tisdagsklubben_database
-    environment:
-      MYSQL_ROOT_PASSWORD: 'el_rooto'
-      MYSQL_USER: 'database_user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_DATABASE: 'whisky'
+  fail2ban:
+    build: ./fail2ban
+    restart: unless-stopped
+    container_name: fail2ban
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     volumes:
-        - db_data:/var/lib/mysql
-
-  node:
-    build: ./app
-    user: "node"
-    container_name: tisdagsklubben_server
-    working_dir: /home/node/app
-    environment:
-      - NODE_ENV=debug
-    ports:
-      - 3001:3001
-    command: "npm run docker"
+      - fail2ban_db:/fail2ban_db
+      - log_collector:/xlogs
+    env_file:
+      - fail2ban/fail2ban.env
 
   nginx:
     build: ./nginx
+    restart: unless-stopped
     environment:
         - CERTBOT_EMAIL=
         - DHPARAM_SIZE=2048
@@ -37,8 +28,39 @@ services:
     volumes:
       - nginx_secrets:/etc/letsencrypt
     depends_on:
+      - fail2ban
       - node
+
+  db:
+    build: ./database
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    container_name: tisdagsklubben_database
+    environment:
+      MYSQL_ROOT_PASSWORD: 'el_rooto'
+      MYSQL_USER: 'database_user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_DATABASE: 'whisky'
+    volumes:
+      - db_data:/var/lib/mysql
+
+  node:
+    build: ./app
+    user: "node"
+    restart: unless-stopped
+    container_name: tisdagsklubben_server
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=debug
+    ports:
+      - 3001:3001
+    command: "npm run docker"
+    depends_on:
+      - db
 
 volumes:
   db_data:
+  fail2ban_db:
+  log_collector:
   nginx_secrets:

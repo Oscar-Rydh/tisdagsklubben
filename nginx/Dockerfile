@@ -1,5 +1,7 @@
 FROM jonasal/nginx-certbot:latest
 
+RUN mkdir /xlogs && chmod 777 /xlogs
+
 # Copy in config files for nginx
 COPY config/* /etc/nginx/
 
